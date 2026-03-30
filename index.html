@@ -121,7 +121,18 @@ body {
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
   overflow: hidden;
 }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-scroll { max-height: 660px; overflow-y: auto; }
+.table-scroll::-webkit-scrollbar { width: 5px; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+col.c-num { width: 50px; }
+col.c-url { }
+col.c-domain { width: 140px; }
+col.c-img { width: 90px; }
+col.c-idx { width: 90px; }
+col.c-cnt { width: 75px; }
+col.c-rank { width: 80px; }
+col.c-snip { width: 260px; }
 thead th {
   padding: 12px 14px; text-align: left; font-size: 11px; font-weight: 600;
   color: var(--text3); text-transform: uppercase; letter-spacing: .05em;
@@ -132,13 +143,9 @@ thead th {
 thead th:hover { color: var(--blue); }
 thead th .sort-arrow { font-size: 10px; margin-left: 4px; opacity: .4; }
 thead th.sorted .sort-arrow { opacity: 1; color: var(--blue); }
-tbody { max-height: 600px; }
-.table-scroll { max-height: 620px; overflow-y: auto; }
-.table-scroll::-webkit-scrollbar { width: 5px; }
-.table-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 tbody tr { border-bottom: 1px solid #15151f; transition: background .1s; }
 tbody tr:hover { background: #16162080; }
-td { padding: 10px 14px; vertical-align: middle; }
+td { padding: 10px 14px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 td.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
 td.center { text-align: center; }
 td.url-cell {
@@ -177,7 +184,7 @@ td a:hover { text-decoration: underline; }
       <div class="logo">🔍</div>
       <div>
         <h1>Image SERP 收錄檢測報表</h1>
-        <div class="sub">透過 SerpAPI × Google 圖片搜尋驗證 · 2026-03-30 14:22:05</div>
+        <div class="sub">透過 SerpAPI × Google 圖片搜尋驗證 · 2026-03-30 07:03:25</div>
       </div>
     </div>
     <div class="header-right">
@@ -189,27 +196,27 @@ td a:hover { text-decoration: underline; }
   <!-- Stats -->
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value blue">10</div>
+      <div class="stat-value blue">4</div>
       <div class="stat-label">查詢總數</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value green">10</div>
+      <div class="stat-value green">2</div>
       <div class="stat-label">圖片已收錄</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value red">0</div>
+      <div class="stat-value red">1</div>
       <div class="stat-label">圖片未收錄</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value amber">0</div>
+      <div class="stat-value amber">1</div>
       <div class="stat-label">查詢錯誤</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value purple">10</div>
+      <div class="stat-value purple">3</div>
       <div class="stat-label">頁面已索引</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value green">100.0%</div>
+      <div class="stat-value green">50.0%</div>
       <div class="stat-label">圖片收錄率</div>
     </div>
   </div>
@@ -220,11 +227,11 @@ td a:hover { text-decoration: underline; }
       <div class="chart-title">收錄分佈</div>
       <div class="donut-wrap">
         <svg id="donut" width="180" height="180" viewBox="0 0 180 180"></svg>
-        <div class="donut-center" id="donutCenter">100.0%</div>
+        <div class="donut-center" id="donutCenter">50.0%</div>
         <div class="donut-legend">
-          <span><i class="dot" style="background:var(--green)"></i> 已收錄 10</span>
-          <span><i class="dot" style="background:var(--red)"></i> 未收錄 0</span>
-          <span><i class="dot" style="background:var(--amber)"></i> 錯誤 0</span>
+          <span><i class="dot" style="background:var(--green)"></i> 已收錄 2</span>
+          <span><i class="dot" style="background:var(--red)"></i> 未收錄 1</span>
+          <span><i class="dot" style="background:var(--amber)"></i> 錯誤 1</span>
         </div>
       </div>
     </div>
@@ -247,22 +254,25 @@ td a:hover { text-decoration: underline; }
 
   <!-- Table -->
   <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th onclick="sortBy('i')" style="width:50px"># <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('url')">URL <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('domain')" style="width:140px">域名 <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('image_found')" style="width:90px;text-align:center">圖片收錄 <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('indexed')" style="width:90px;text-align:center">頁面索引 <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('image_count')" style="width:80px;text-align:center">圖片數 <span class="sort-arrow">▲</span></th>
-          <th onclick="sortBy('best_position')" style="width:80px;text-align:center">最佳排名 <span class="sort-arrow">▲</span></th>
-          <th style="min-width:200px">摘要</th>
-        </tr>
-      </thead>
-    </table>
     <div class="table-scroll">
       <table>
+        <colgroup>
+          <col class="c-num"><col class="c-url"><col class="c-domain">
+          <col class="c-img"><col class="c-idx"><col class="c-cnt">
+          <col class="c-rank"><col class="c-snip">
+        </colgroup>
+        <thead>
+          <tr>
+            <th onclick="sortBy('i')"># <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('url')">URL <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('domain')">域名 <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('image_found')" style="text-align:center">圖片收錄 <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('indexed')" style="text-align:center">頁面索引 <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('image_count')" style="text-align:center">圖片數 <span class="sort-arrow">▲</span></th>
+            <th onclick="sortBy('best_position')" style="text-align:center">最佳排名 <span class="sort-arrow">▲</span></th>
+            <th>摘要</th>
+          </tr>
+        </thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
@@ -272,14 +282,14 @@ td a:hover { text-decoration: underline; }
   <!-- Footer -->
   <div class="footer">
     <span>Image SERP 收錄批量檢測工具 · SerpAPI × Google Images</span>
-    <span>報表產生時間: 2026-03-30 14:22:05</span>
+    <span>報表產生時間: 2026-03-30 07:03:25</span>
   </div>
 </div>
 
 <script>
 // ─── Data ───
-const DATA = [{"i": 1, "url": "https://fubetsdd.com", "domain": "fubetsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Entretenimento Online: Inovações à Sua Porta", "image_urls": "https://fubetsdd.com/home-01-img.png", "source_urls": "https://fubetsdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 2, "url": "https://tptpsdd.com", "domain": "tptpsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Sua Passagem ao Entretenimento Online Inovador", "image_urls": "https://tptpsdd.com/home-01-img.png", "source_urls": "https://tptpsdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 3, "url": "https://w78sdd.com", "domain": "w78sdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Transforme seu Futuro Digital Agora", "image_urls": "https://w78sdd.com/home-01-img.png", "source_urls": "https://w78sdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 4, "url": "https://505betsdd.com", "domain": "505betsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 3, "best_position": 1, "image_titles": "Apostas Online: Segurança e Confiança | Apostas Online: Segurança e Confiança | Apostas Online: Segurança e Confiança", "image_urls": "https://505betsdd.com/assets/images/logo.png?v=31 | https://505betsdd.com/assets/images/home-2-img.png?v=31 | https://505betsdd.com/assets/images/home-1-img.png?v=31", "source_urls": "https://505betsdd.com/ | https://505betsdd.com/ | https://505betsdd.com/", "snippet": "✓ 找到 3 張圖片，最佳排名第 1 名"}, {"i": 5, "url": "https://e66sdd.com", "domain": "e66sdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Apostas Online: Confiabilidade e Segurança", "image_urls": "https://e66sdd.com/assets/images/logo.png?v=11", "source_urls": "https://e66sdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 6, "url": "https://kebetsdd.com", "domain": "kebetsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Experimente o Exclusivo Clube VIP kebet.com | Inovações no Entretenimento Online", "image_urls": "https://kebetsdd.com/logo.png | https://kebetsdd.com/home-01-img.png", "source_urls": "https://kebetsdd.com/vip/ | https://kebetsdd.com/", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 7, "url": "https://89hsdd.com", "domain": "89hsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 3, "best_position": 1, "image_titles": "Segurança Fortalecida na Plataforma 89h.com | Novidades no Mundo do Entretenimento Digital | Segurança Fortalecida na Plataforma 89h.com", "image_urls": "https://89hsdd.com/logo.png | https://89hsdd.com/home-01-img.png | https://89hsdd.com/plataforma-02-img.png", "source_urls": "https://89hsdd.com/plataforma/ | https://89hsdd.com/ | https://89hsdd.com/plataforma/", "snippet": "✓ 找到 3 張圖片，最佳排名第 1 名"}, {"i": 8, "url": "https://musapgsdd.com", "domain": "musapgsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Últimas Tendências no Entretenimento Digital", "image_urls": "https://musapgsdd.com/home-01-img.png", "source_urls": "https://musapgsdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 9, "url": "https://5wpgsdd.com", "domain": "5wpgsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Tendências Atuais no Mundo Digital", "image_urls": "https://5wpgsdd.com/home-01-img.png", "source_urls": "https://5wpgsdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 10, "url": "https://hh888sdd.com", "domain": "hh888sdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "O Futuro do Mundo Digital", "image_urls": "https://hh888sdd.com/home-01-img.png", "source_urls": "https://hh888sdd.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}];
-const DOMAINS = [{"domain": "fubetsdd.com", "total": 1, "found": 1}, {"domain": "tptpsdd.com", "total": 1, "found": 1}, {"domain": "w78sdd.com", "total": 1, "found": 1}, {"domain": "505betsdd.com", "total": 1, "found": 1}, {"domain": "e66sdd.com", "total": 1, "found": 1}, {"domain": "kebetsdd.com", "total": 1, "found": 1}, {"domain": "89hsdd.com", "total": 1, "found": 1}, {"domain": "musapgsdd.com", "total": 1, "found": 1}, {"domain": "5wpgsdd.com", "total": 1, "found": 1}, {"domain": "hh888sdd.com", "total": 1, "found": 1}];
+const DATA = [{"i": 1, "url": "https://www.fubetsdd.com", "domain": "fubetsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Fubetsdd", "image_urls": "https://img.jpg", "source_urls": "https://www.fubetsdd.com", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 2, "url": "https://www.tntnsdd.com", "domain": "tntnsdd.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Test", "image_urls": "https://img2.jpg", "source_urls": "https://www.tntnsdd.com", "snippet": "✓ 找到 1 張圖片"}, {"i": 3, "url": "https://www.example.com/very-long-page-url-that-should-be-truncated-properly", "domain": "example.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 site:example.com 回傳 20 張圖片，未匹配到此 URL"}, {"i": 4, "url": "https://broken.com/page", "domain": "broken.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 403: Forbidden"}];
+const DOMAINS = [{"domain": "fubetsdd.com", "total": 1, "found": 1}, {"domain": "tntnsdd.com", "total": 1, "found": 1}, {"domain": "example.com", "total": 1, "found": 0}, {"domain": "broken.com", "total": 1, "found": 0}];
 
 let filtered = [...DATA];
 let currentFilter = 'all';
@@ -289,7 +299,7 @@ let sortAsc = true;
 // ─── Donut Chart ───
 function drawDonut() {
   const svg = document.getElementById('donut');
-  const vals = [10, 0, 0];
+  const vals = [2, 1, 1];
   const colors = ['var(--green)', 'var(--red)', 'var(--amber)'];
   const total = vals.reduce((a, b) => a + b, 0) || 1;
   const cx = 90, cy = 90, r = 70, sw = 18;
