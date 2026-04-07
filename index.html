@@ -6,242 +6,102 @@
 <title>Image SERP 收錄檢測報表</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 :root {
-  --bg: #0c0c14; --bg2: #13131e; --bg3: #1a1a2a;
-  --border: #1e1e30; --border2: #2a2a40;
-  --text: #d8d8ec; --text2: #9090b0; --text3: #555570;
-  --green: #34d399; --green-bg: #0d3320;
-  --red: #f87171; --red-bg: #3b1c1c;
-  --amber: #fbbf24; --amber-bg: #3b2e1c;
-  --blue: #4ea8de; --purple: #7c3aed;
-  --radius: 12px;
+  --bg:#0c0c14;--bg2:#13131e;--bg3:#1a1a2a;--border:#1e1e30;--border2:#2a2a40;
+  --text:#d8d8ec;--text2:#9090b0;--text3:#555570;
+  --green:#34d399;--green-bg:#0d3320;--red:#f87171;--red-bg:#3b1c1c;
+  --amber:#fbbf24;--amber-bg:#3b2e1c;--blue:#4ea8de;--purple:#7c3aed;--radius:12px;
 }
-body {
-  font-family: 'Noto Sans TC', sans-serif;
-  background: var(--bg); color: var(--text);
-  line-height: 1.6; min-height: 100vh;
-}
-.container { max-width: 1400px; margin: 0 auto; padding: 24px 28px; }
-
-/* Header */
-.header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 0 28px; border-bottom: 1px solid var(--border);
-  margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
-}
-.header-left { display: flex; align-items: center; gap: 14px; }
-.logo {
-  width: 40px; height: 40px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-  display: flex; align-items: center; justify-content: center; font-size: 20px;
-}
-.header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
-.header .sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
-.header-right { display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* Buttons */
-.btn {
-  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border2);
-  background: var(--bg2); color: var(--text2); font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: all .15s; font-family: inherit;
-}
-.btn:hover { border-color: var(--blue); color: var(--blue); }
-.btn.active { background: #1a2840; border-color: var(--blue); color: var(--blue); }
-.btn-primary {
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-  border: none; color: #fff;
-}
-
-/* Stats Cards */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
-.stat-card {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 18px 20px; text-align: center;
-}
-.stat-value {
-  font-size: 28px; font-weight: 700;
-  font-family: 'JetBrains Mono', monospace; line-height: 1.2;
-}
-.stat-label { font-size: 12px; color: var(--text3); margin-top: 4px; font-weight: 500; }
-.stat-value.green { color: var(--green); }
-.stat-value.red { color: var(--red); }
-.stat-value.amber { color: var(--amber); }
-.stat-value.blue { color: var(--blue); }
-.stat-value.purple { color: var(--purple); }
-
-/* Charts Area */
-.charts { display: grid; grid-template-columns: 300px 1fr; gap: 18px; margin-bottom: 28px; }
-@media (max-width: 800px) { .charts { grid-template-columns: 1fr; } }
-.chart-card {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px;
-}
-.chart-title { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 16px; }
-
-/* Donut Chart */
-.donut-wrap { display: flex; align-items: center; justify-content: center; flex-direction: column; }
-.donut-center { font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-.donut-legend { display: flex; gap: 18px; margin-top: 16px; font-size: 12px; color: var(--text2); }
-.donut-legend span { display: flex; align-items: center; gap: 5px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-
-/* Bar Chart */
-.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
-.bar-label { width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text2); text-align: right; }
-.bar-track { flex: 1; height: 20px; background: var(--bg3); border-radius: 4px; overflow: hidden; position: relative; }
-.bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
-.bar-fill.green { background: var(--green); }
-.bar-fill.red { background: rgba(248,113,113,0.4); }
-.bar-val { font-family: 'JetBrains Mono', monospace; width: 60px; color: var(--text3); font-size: 11px; }
-
-/* Controls */
-.controls {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-.search-box {
-  flex: 1; min-width: 200px; padding: 8px 14px; border-radius: 8px;
-  border: 1px solid var(--border2); background: var(--bg3); color: var(--text);
-  font-size: 13px; font-family: inherit; outline: none;
-}
-.search-box:focus { border-color: var(--blue); }
-.filter-group { display: flex; gap: 4px; }
-.filter-btn {
-  padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
-  background: transparent; color: var(--text3); font-size: 12px;
-  cursor: pointer; font-family: inherit; font-weight: 500; transition: all .15s;
-}
-.filter-btn:hover { border-color: var(--blue); color: var(--blue); }
-.filter-btn.active { background: #1a2840; border-color: var(--blue); color: var(--blue); }
-
-/* Table */
-.table-wrap {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden;
-}
-.table-scroll { max-height: 660px; overflow-y: auto; }
-.table-scroll::-webkit-scrollbar { width: 5px; }
-.table-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-col.c-num { width: 50px; }
-col.c-url { }
-col.c-domain { width: 140px; }
-col.c-img { width: 90px; }
-col.c-idx { width: 90px; }
-col.c-cnt { width: 75px; }
-col.c-rank { width: 80px; }
-col.c-snip { width: 260px; }
-thead th {
-  padding: 12px 14px; text-align: left; font-size: 11px; font-weight: 600;
-  color: var(--text3); text-transform: uppercase; letter-spacing: .05em;
-  background: var(--bg3); border-bottom: 1px solid var(--border);
-  cursor: pointer; user-select: none; white-space: nowrap;
-  position: sticky; top: 0; z-index: 10;
-}
-thead th:hover { color: var(--blue); }
-thead th .sort-arrow { font-size: 10px; margin-left: 4px; opacity: .4; }
-thead th.sorted .sort-arrow { opacity: 1; color: var(--blue); }
-tbody tr { border-bottom: 1px solid #15151f; transition: background .1s; }
-tbody tr:hover { background: #16162080; }
-td { padding: 10px 14px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-td.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-td.center { text-align: center; }
-td.url-cell {
-  max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2);
-}
-td a { color: var(--blue); text-decoration: none; }
-td a:hover { text-decoration: underline; }
-
-/* Badges */
-.badge {
-  display: inline-block; padding: 3px 10px; border-radius: 6px;
-  font-size: 11px; font-weight: 600; white-space: nowrap;
-}
-.badge.found { background: var(--green-bg); color: var(--green); }
-.badge.not_found { background: var(--red-bg); color: var(--red); }
-.badge.error { background: var(--amber-bg); color: var(--amber); }
-.yes { color: var(--green); font-weight: 600; }
-.no { color: var(--red); font-weight: 600; }
-
-/* Footer */
-.footer {
-  margin-top: 24px; padding: 16px 0; border-top: 1px solid var(--border);
-  font-size: 11px; color: var(--text3); display: flex; justify-content: space-between;
-  flex-wrap: wrap; gap: 8px;
-}
-.count-info { font-size: 12px; color: var(--text3); margin-top: 10px; }
+body { font-family:'Noto Sans TC',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+.container { max-width:1400px; margin:0 auto; padding:24px 28px; }
+.header { display:flex; align-items:center; justify-content:space-between; padding:20px 0 28px; border-bottom:1px solid var(--border); margin-bottom:28px; flex-wrap:wrap; gap:16px; }
+.header-left { display:flex; align-items:center; gap:14px; }
+.logo { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,var(--blue),var(--purple)); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.header h1 { font-size:20px; font-weight:700; }
+.header .sub { font-size:12px; color:var(--text3); margin-top:2px; }
+.btn { padding:8px 16px; border-radius:8px; border:1px solid var(--border2); background:var(--bg2); color:var(--text2); font-size:13px; cursor:pointer; font-family:inherit; }
+.btn:hover { border-color:var(--blue); color:var(--blue); }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:28px; }
+.stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; text-align:center; }
+.stat-value { font-size:26px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+.stat-label { font-size:12px; color:var(--text3); margin-top:4px; }
+.stat-value.green { color:var(--green); } .stat-value.red { color:var(--red); }
+.stat-value.amber { color:var(--amber); } .stat-value.blue { color:var(--blue); }
+.stat-value.purple { color:var(--purple); }
+.charts { display:grid; grid-template-columns:300px 1fr; gap:18px; margin-bottom:28px; }
+@media (max-width:800px) { .charts { grid-template-columns:1fr; } }
+.chart-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.chart-title { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:16px; }
+.donut-wrap { display:flex; align-items:center; justify-content:center; flex-direction:column; }
+.donut-center { font-size:26px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+.donut-legend { display:flex; gap:18px; margin-top:16px; font-size:12px; color:var(--text2); }
+.donut-legend span { display:flex; align-items:center; gap:5px; }
+.dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.bar-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:12px; }
+.bar-label { width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text2); text-align:right; }
+.bar-track { flex:1; height:20px; background:var(--bg3); border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; } .bar-fill.green { background:var(--green); } .bar-fill.red { background:rgba(248,113,113,0.4); }
+.bar-val { font-family:'JetBrains Mono',monospace; width:60px; color:var(--text3); font-size:11px; }
+.controls { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.search-box { flex:1; min-width:200px; padding:8px 14px; border-radius:8px; border:1px solid var(--border2); background:var(--bg3); color:var(--text); font-size:13px; font-family:inherit; outline:none; }
+.search-box:focus { border-color:var(--blue); }
+.filter-group { display:flex; gap:4px; }
+.filter-btn { padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text3); font-size:12px; cursor:pointer; font-family:inherit; font-weight:500; }
+.filter-btn:hover { border-color:var(--blue); color:var(--blue); }
+.filter-btn.active { background:#1a2840; border-color:var(--blue); color:var(--blue); }
+.table-wrap { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.table-scroll { max-height:660px; overflow-y:auto; }
+.table-scroll::-webkit-scrollbar { width:5px; }
+.table-scroll::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+table { width:100%; border-collapse:collapse; font-size:13px; table-layout:fixed; }
+col.c-num { width:50px; } col.c-url { } col.c-domain { width:140px; }
+col.c-img { width:90px; } col.c-idx { width:90px; } col.c-cnt { width:75px; }
+col.c-rank { width:80px; } col.c-snip { width:260px; }
+thead th { padding:12px 14px; text-align:left; font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; background:var(--bg3); border-bottom:1px solid var(--border); cursor:pointer; user-select:none; white-space:nowrap; position:sticky; top:0; z-index:10; }
+thead th:hover { color:var(--blue); }
+thead th .sort-arrow { font-size:10px; margin-left:4px; opacity:.4; }
+thead th.sorted .sort-arrow { opacity:1; color:var(--blue); }
+tbody tr { border-bottom:1px solid #15151f; } tbody tr:hover { background:#16162080; }
+td { padding:10px 14px; vertical-align:middle; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+td.mono { font-family:'JetBrains Mono',monospace; font-size:12px; } td.center { text-align:center; }
+.badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:600; white-space:nowrap; }
+.badge.found { background:var(--green-bg); color:var(--green); }
+.badge.not_found { background:var(--red-bg); color:var(--red); }
+.badge.error { background:var(--amber-bg); color:var(--amber); }
+.yes { color:var(--green); font-weight:600; } .no { color:var(--red); font-weight:600; }
+.footer { margin-top:24px; padding:16px 0; border-top:1px solid var(--border); font-size:11px; color:var(--text3); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.count-info { font-size:12px; color:var(--text3); margin-top:10px; }
 </style>
 </head>
 <body>
 <div class="container">
-
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <div class="logo">🔍</div>
-      <div>
-        <h1>Image SERP 收錄檢測報表</h1>
-        <div class="sub">透過 SerpAPI × Google 圖片搜尋驗證 · 2026-03-30 16:43:44</div>
-      </div>
+      <div><h1>Image SERP 收錄檢測報表</h1><div class="sub">DataForSEO × Google 圖片搜尋 · 2026-04-07 11:57:35 · 花費 $0.6600</div></div>
     </div>
-    <div class="header-right">
+    <div style="display:flex;gap:8px">
       <button class="btn" onclick="exportCSV()">📥 匯出 CSV</button>
       <button class="btn" onclick="window.print()">🖨️ 列印</button>
     </div>
   </div>
-
-  <!-- Stats -->
   <div class="stats">
-    <div class="stat-card">
-      <div class="stat-value blue">30</div>
-      <div class="stat-label">查詢總數</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value green">15</div>
-      <div class="stat-label">圖片已收錄</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value red">15</div>
-      <div class="stat-label">圖片未收錄</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value amber">0</div>
-      <div class="stat-label">查詢錯誤</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value purple">30</div>
-      <div class="stat-label">頁面已索引</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value green">50.0%</div>
-      <div class="stat-label">圖片收錄率</div>
-    </div>
+    <div class="stat-card"><div class="stat-value blue">100</div><div class="stat-label">查詢總數</div></div>
+    <div class="stat-card"><div class="stat-value green">36</div><div class="stat-label">圖片已收錄</div></div>
+    <div class="stat-card"><div class="stat-value red">0</div><div class="stat-label">圖片未收錄</div></div>
+    <div class="stat-card"><div class="stat-value amber">67</div><div class="stat-label">查詢錯誤</div></div>
+    <div class="stat-card"><div class="stat-value purple">33</div><div class="stat-label">頁面已索引</div></div>
+    <div class="stat-card"><div class="stat-value green">36.0%</div><div class="stat-label">圖片收錄率</div></div>
   </div>
-
-  <!-- Charts -->
   <div class="charts">
-    <div class="chart-card">
-      <div class="chart-title">收錄分佈</div>
-      <div class="donut-wrap">
-        <svg id="donut" width="180" height="180" viewBox="0 0 180 180"></svg>
-        <div class="donut-center" id="donutCenter">50.0%</div>
-        <div class="donut-legend">
-          <span><i class="dot" style="background:var(--green)"></i> 已收錄 15</span>
-          <span><i class="dot" style="background:var(--red)"></i> 未收錄 15</span>
-          <span><i class="dot" style="background:var(--amber)"></i> 錯誤 0</span>
-        </div>
-      </div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">域名收錄概覽 (Top 20)</div>
-      <div id="domainBars" style="max-height:340px;overflow-y:auto"></div>
-    </div>
+    <div class="chart-card"><div class="chart-title">收錄分佈</div><div class="donut-wrap">
+      <svg id="donut" width="180" height="180" viewBox="0 0 180 180"></svg>
+      <div class="donut-center" id="donutCenter">36.0%</div>
+      <div class="donut-legend"><span><i class="dot" style="background:var(--green)"></i> 已收錄 36</span><span><i class="dot" style="background:var(--red)"></i> 未收錄 0</span><span><i class="dot" style="background:var(--amber)"></i> 錯誤 67</span></div>
+    </div></div>
+    <div class="chart-card"><div class="chart-title">域名收錄概覽 (Top 20)</div><div id="domainBars" style="max-height:340px;overflow-y:auto"></div></div>
   </div>
-
-  <!-- Controls -->
   <div class="controls">
     <input type="text" class="search-box" id="search" placeholder="🔎 搜尋 URL 或域名..." oninput="applyFilters()">
     <div class="filter-group">
@@ -251,177 +111,34 @@ td a:hover { text-decoration: underline; }
       <button class="filter-btn" data-filter="error" onclick="setFilter(this)">⚠ 錯誤</button>
     </div>
   </div>
-
-  <!-- Table -->
-  <div class="table-wrap">
-    <div class="table-scroll">
-      <table>
-        <colgroup>
-          <col class="c-num"><col class="c-url"><col class="c-domain">
-          <col class="c-img"><col class="c-idx"><col class="c-cnt">
-          <col class="c-rank"><col class="c-snip">
-        </colgroup>
-        <thead>
-          <tr>
-            <th onclick="sortBy('i')"># <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('url')">URL <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('domain')">域名 <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('image_found')" style="text-align:center">圖片收錄 <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('indexed')" style="text-align:center">頁面索引 <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('image_count')" style="text-align:center">圖片數 <span class="sort-arrow">▲</span></th>
-            <th onclick="sortBy('best_position')" style="text-align:center">最佳排名 <span class="sort-arrow">▲</span></th>
-            <th>摘要</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-  </div>
+  <div class="table-wrap"><div class="table-scroll"><table>
+    <colgroup><col class="c-num"><col class="c-url"><col class="c-domain"><col class="c-img"><col class="c-idx"><col class="c-cnt"><col class="c-rank"><col class="c-snip"></colgroup>
+    <thead><tr>
+      <th onclick="sortBy('i')"># <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('url')">URL <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('domain')">域名 <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('image_found')" style="text-align:center">圖片收錄 <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('indexed')" style="text-align:center">頁面索引 <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('image_count')" style="text-align:center">圖片數 <span class="sort-arrow">▲</span></th>
+      <th onclick="sortBy('best_position')" style="text-align:center">最佳排名 <span class="sort-arrow">▲</span></th>
+      <th>摘要</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table></div></div>
   <div class="count-info" id="countInfo"></div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <span>Image SERP 收錄批量檢測工具 · SerpAPI × Google Images</span>
-    <span>報表產生時間: 2026-03-30 16:43:44</span>
-  </div>
+  <div class="footer"><span>Image SERP 收錄批量檢測 · DataForSEO × Google Images</span><span>2026-04-07 11:57:35</span></div>
 </div>
-
 <script>
-// ─── Data ───
-const DATA = [{"i": 1, "url": "https://6aaacasinohub.com", "domain": "6aaacasinohub.com", "status": "found", "indexed": true, "image_found": true, "image_count": 5, "best_position": 1, "image_titles": "6aaa | Home | 6aaa | Home | 6aaa | Home | 6aaa | Home | 6aaa | Home", "image_urls": "https://6aaacasinohub.com/assets/images/t34-home-hero-br.webp | https://6aaacasinohub.com/assets/images/t34-app-show--01.webp | https://6aaacasinohub.com/assets/images/t34-home-feat--01.webp | https://6aaacasinohub.com/assets/images/t34-home-feat--03.webp | https://6aaacasinohub.com/assets/images/t34-home-feat--02.webp", "source_urls": "https://6aaacasinohub.com/ | https://6aaacasinohub.com/ | https://6aaacasinohub.com/ | https://6aaacasinohub.com/ | https://6aaacasinohub.com/", "snippet": "✓ 找到 5 張圖片，最佳排名第 1 名"}, {"i": 2, "url": "https://6ffcasinohub.com", "domain": "6ffcasinohub.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:6ffcasinohub.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 3, "url": "https://6rrrcasinohub.com", "domain": "6rrrcasinohub.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:6rrrcasinohub.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 4, "url": "https://45rrcasinohub.com", "domain": "45rrcasinohub.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Link 45rr: Entrada Ágil e Segura", "image_urls": "https://45rrcasinohub.com/assets/images/slot.gif", "source_urls": "https://45rrcasinohub.com/link-de-acesso.html", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 5, "url": "https://47qqcasinohub.com", "domain": "47qqcasinohub.com", "status": "found", "indexed": true, "image_found": true, "image_count": 3, "best_position": 1, "image_titles": "47qq.com | Plataforma de Apostas Confiável e Segura | 47qq.com | Plataforma de Apostas Confiável e Segura | 47qq.com | Plataforma de Apostas Confiável e Segura", "image_urls": "https://47qqcasinohub.com/assets/images/slot.gif | https://47qqcasinohub.com/assets/images/home-1-img.png?v=51 | https://47qqcasinohub.com/assets/images/home-2-img.png?v=51", "source_urls": "https://47qqcasinohub.com/ | https://47qqcasinohub.com/ | https://47qqcasinohub.com/", "snippet": "✓ 找到 3 張圖片，最佳排名第 1 名"}, {"i": 6, "url": "https://47scasinohub.com", "domain": "47scasinohub.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:47scasinohub.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 7, "url": "https://53bwinvault.com", "domain": "53bwinvault.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:53bwinvault.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 8, "url": "https://67eewinvault.com", "domain": "67eewinvault.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "67ee: Apostas Online com Máxima Segurança", "image_urls": "https://67eewinvault.com/assets/images/home-1-img.png?v=71", "source_urls": "https://67eewinvault.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 9, "url": "https://68fwinvault.com", "domain": "68fwinvault.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:68fwinvault.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 10, "url": "https://69pwinvault.com", "domain": "69pwinvault.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:69pwinvault.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 11, "url": "https://98eluckygame.com", "domain": "98eluckygame.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:98eluckygame.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 12, "url": "https://312betluckygame.com", "domain": "312betluckygame.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:312betluckygame.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 13, "url": "https://571betluckygame.com", "domain": "571betluckygame.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "571bet.com | Plataforma de Apostas Confiável e Segura", "image_urls": "https://571betluckygame.com/assets/images/slot.gif", "source_urls": "https://571betluckygame.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 14, "url": "https://615betluckygame.com", "domain": "615betluckygame.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:615betluckygame.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 15, "url": "https://7622luckygame.com", "domain": "7622luckygame.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "7622: Apostas Online com Máxima Segurança", "image_urls": "https://7622luckygame.com/assets/images/home-1-img.png?v=71", "source_urls": "https://7622luckygame.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 16, "url": "https://aa1998megaluck.com", "domain": "aa1998megaluck.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:aa1998megaluck.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 17, "url": "https://bhb777megaluck.com", "domain": "bhb777megaluck.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "bhb777.com | Plataforma de Apostas Confiável e Segura", "image_urls": "https://bhb777megaluck.com/assets/images/slot.gif", "source_urls": "https://bhb777megaluck.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 18, "url": "https://cc333megaluck.com", "domain": "cc333megaluck.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "cc333 | Jogos Rápidos, Bônus Diários e Diversão Sem Parar", "image_urls": "https://cc333megaluck.com/assets/images/home-1-img.png?v=1.6", "source_urls": "http://cc333megaluck.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 19, "url": "https://gc987megaluck.com", "domain": "gc987megaluck.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:gc987megaluck.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 20, "url": "https://cis777megaluck.com", "domain": "cis777megaluck.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:cis777megaluck.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 21, "url": "https://45d-com.com", "domain": "45d-com.com", "status": "found", "indexed": true, "image_found": true, "image_count": 16, "best_position": 1, "image_titles": "45d | Plataforma | 45d | Esportes | 45d | Cadastro | 45d | App | 45d | App", "image_urls": "https://45d-com.com/assets/images/t34-plat-tech--01.webp | https://45d-com.com/assets/images/t34-esp-hero-br.webp | https://45d-com.com/assets/images/t34-cad-step--01.webp | https://45d-com.com/assets/images/t34-app-show--02.webp | https://45d-com.com/assets/images/t34-app-hero-br.webp", "source_urls": "https://45d-com.com/plataforma.html | https://45d-com.com/apostas-esportivas.html | https://45d-com.com/cadastre-se.html | https://45d-com.com/aplicativo.html | https://45d-com.com/aplicativo.html", "snippet": "✓ 找到 16 張圖片，最佳排名第 1 名"}, {"i": 22, "url": "https://45dhola.com", "domain": "45dhola.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "45d | Cadastre-se", "image_urls": "https://45dhola.com/assets/images/11logo.png", "source_urls": "https://45dhola.com/cadastre-se.html", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 23, "url": "https://35mhola.com", "domain": "35mhola.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:35mhola.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 24, "url": "https://669a-com.com", "domain": "669a-com.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "669a.com Cadastre-se Hoje | Crie Sua Conta Oficial | 669a-com.com Jogos Online | Cassino, Slots e Jogos Ao Vivo", "image_urls": "https://669a-com.com/assets/images/cadastre-se-1-img.png?v=41 | https://669a-com.com/assets/images/jogos-1-img.png?v=41", "source_urls": "https://669a-com.com/cadastre-se.html | https://669a-com.com/jogos.html", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 25, "url": "https://79ffhola.com", "domain": "79ffhola.com", "status": "found", "indexed": true, "image_found": true, "image_count": 6, "best_position": 1, "image_titles": "79ffhola.com Cadastre-se Hoje | Crie Sua Conta Oficial | 79ff.com | Plataforma de Apostas Confiável e Segura | 79ffhola.com Jogos Online | Cassino, Slots e Jogos Ao Vivo | 79ffhola.com Plataforma Oficial | Jogos Online e Apostas | 79ff.com Apostas Esportivas Online | Futebol e Ao Vivo", "image_urls": "https://79ffhola.com/assets/images/cadastre-se-1-img.png?v=51 | https://79ffhola.com/assets/images/17logo.png?v=51 | https://79ffhola.com/assets/images/jogos-2-img.png?v=51 | https://79ffhola.com/assets/images/plataforma-1-img.png?v=51 | https://79ffhola.com/assets/images/apostas-esportivas-1-img.png?v=51", "source_urls": "https://79ffhola.com/cadastre-se.html | https://79ffhola.com/ | https://79ffhola.com/jogos.html | https://79ffhola.com/plataforma.html | https://79ffhola.com/apostas-esportivas.html", "snippet": "✓ 找到 6 張圖片，最佳排名第 1 名"}, {"i": 26, "url": "https://qq55-br.com", "domain": "qq55-br.com", "status": "found", "indexed": true, "image_found": true, "image_count": 5, "best_position": 1, "image_titles": "qq55.com Cadastre-se Hoje | Crie Sua Conta Oficial | qq55.com Jogos Online | Cassino, Slots e Jogos Ao Vivo | qq55.com Plataforma Oficial | Jogos Online e Apostas | qq55.com Link de Acesso Oficial | Entrar Sem Bloqueios | qq55.com Promoções | Bônus Exclusivos e Ofertas Ativas", "image_urls": "https://qq55-br.com/assets/images/3logo.png?v=51 | https://qq55-br.com/assets/images/jogos-2-img.png?v=51 | https://qq55-br.com/assets/images/plataforma-1-img.png?v=51 | https://qq55-br.com/assets/images/link-de-acesso-1-img.png?v=51 | https://qq55-br.com/assets/images/promocoes-1-img.png?v=51", "source_urls": "https://qq55-br.com/cadastre-se.html | https://qq55-br.com/jogos.html | https://qq55-br.com/plataforma.html | https://qq55-br.com/link-de-acesso.html | https://qq55-br.com/promocoes.html", "snippet": "✓ 找到 5 張圖片，最佳排名第 1 名"}, {"i": 27, "url": "https://79ff-br.com", "domain": "79ff-br.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:79ff-br.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 28, "url": "https://qq55br.com", "domain": "qq55br.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "qq55: Apostas Online com Máxima Segurança", "image_urls": "https://qq55br.com/assets/images/0logo.png?v=71", "source_urls": "https://qq55br.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 29, "url": "https://669a-br.com", "domain": "669a-br.com", "status": "not_found", "indexed": true, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "搜尋 \"site:669a-br.com\" 回傳 0 張圖片，未匹配到此 URL (Google 約 0 筆)"}, {"i": 30, "url": "https://35m-amigo.com", "domain": "35m-amigo.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "35m Cassino Online | Bônus, Slots e Apostas no Brasil", "image_urls": "https://35m-amigo.com/assets/images/83logo.png?v=1.6", "source_urls": "https://35m-amigo.com/", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}];
-const DOMAINS = [{"domain": "6aaacasinohub.com", "total": 1, "found": 1}, {"domain": "6ffcasinohub.com", "total": 1, "found": 0}, {"domain": "6rrrcasinohub.com", "total": 1, "found": 0}, {"domain": "45rrcasinohub.com", "total": 1, "found": 1}, {"domain": "47qqcasinohub.com", "total": 1, "found": 1}, {"domain": "47scasinohub.com", "total": 1, "found": 0}, {"domain": "53bwinvault.com", "total": 1, "found": 0}, {"domain": "67eewinvault.com", "total": 1, "found": 1}, {"domain": "68fwinvault.com", "total": 1, "found": 0}, {"domain": "69pwinvault.com", "total": 1, "found": 0}, {"domain": "98eluckygame.com", "total": 1, "found": 0}, {"domain": "312betluckygame.com", "total": 1, "found": 0}, {"domain": "571betluckygame.com", "total": 1, "found": 1}, {"domain": "615betluckygame.com", "total": 1, "found": 0}, {"domain": "7622luckygame.com", "total": 1, "found": 1}, {"domain": "aa1998megaluck.com", "total": 1, "found": 0}, {"domain": "bhb777megaluck.com", "total": 1, "found": 1}, {"domain": "cc333megaluck.com", "total": 1, "found": 1}, {"domain": "gc987megaluck.com", "total": 1, "found": 0}, {"domain": "cis777megaluck.com", "total": 1, "found": 0}];
-
-let filtered = [...DATA];
-let currentFilter = 'all';
-let sortKey = 'i';
-let sortAsc = true;
-
-// ─── Donut Chart ───
-function drawDonut() {
-  const svg = document.getElementById('donut');
-  const vals = [15, 15, 0];
-  const colors = ['var(--green)', 'var(--red)', 'var(--amber)'];
-  const total = vals.reduce((a, b) => a + b, 0) || 1;
-  const cx = 90, cy = 90, r = 70, sw = 18;
-  let cumAngle = -90;
-
-  svg.innerHTML = '';
-  const circ = 2 * Math.PI * r;
-  vals.forEach((v, i) => {
-    if (v === 0) return;
-    const pct = v / total;
-    const dash = circ * pct;
-    const gap = circ - dash;
-    const rotation = cumAngle;
-    cumAngle += pct * 360;
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
-    circle.setAttribute('r', r); circle.setAttribute('fill', 'none');
-    circle.setAttribute('stroke', colors[i]); circle.setAttribute('stroke-width', sw);
-    circle.setAttribute('stroke-dasharray', `${dash} ${gap}`);
-    circle.setAttribute('transform', `rotate(${rotation} ${cx} ${cy})`);
-    circle.style.transition = 'stroke-dasharray .6s';
-    svg.appendChild(circle);
-  });
-}
-
-// ─── Domain Bars ───
-function drawDomainBars() {
-  const el = document.getElementById('domainBars');
-  const maxTotal = Math.max(...DOMAINS.map(d => d.total), 1);
-  el.innerHTML = DOMAINS.map(d => {
-    const foundPct = (d.found / maxTotal * 100).toFixed(1);
-    const nfPct = ((d.total - d.found) / maxTotal * 100).toFixed(1);
-    const rate = (d.found / d.total * 100).toFixed(1);
-    return `<div class="bar-row">
-      <div class="bar-label" title="${d.domain}">${d.domain}</div>
-      <div class="bar-track">
-        <div class="bar-fill green" style="width:${foundPct}%;position:absolute"></div>
-        <div class="bar-fill red" style="width:${Number(foundPct)+Number(nfPct)}%"></div>
-      </div>
-      <div class="bar-val">${d.found}/${d.total} (${rate}%)</div>
-    </div>`;
-  }).join('');
-}
-
-// ─── Table ───
-function renderTable() {
-  const tbody = document.getElementById('tbody');
-  tbody.innerHTML = filtered.map(r => `<tr>
-    <td class="mono center">${r.i}</td>
-    <td class="url-cell" title="${esc(r.url)}"><a href="${esc(r.url)}" target="_blank">${esc(r.url)}</a></td>
-    <td style="font-size:12px;color:var(--text2)">${esc(r.domain)}</td>
-    <td class="center"><span class="badge ${r.status}">${r.image_found ? '✓ 已收錄' : r.status==='error' ? '⚠ 錯誤' : '✗ 未收錄'}</span></td>
-    <td class="center">${r.indexed ? '<span class=yes>是</span>' : '<span class=no>否</span>'}</td>
-    <td class="mono center">${r.image_count}</td>
-    <td class="mono center">${r.best_position || '—'}</td>
-    <td style="font-size:12px;color:var(--text2);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.snippet)}">${esc(r.snippet)}</td>
-  </tr>`).join('');
-  document.getElementById('countInfo').textContent = `顯示 ${filtered.length} / ${DATA.length} 筆`;
-}
-
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
-
-// ─── Filter ───
-function setFilter(btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentFilter = btn.dataset.filter;
-  applyFilters();
-}
-
-function applyFilters() {
-  const q = document.getElementById('search').value.toLowerCase();
-  filtered = DATA.filter(r => {
-    if (currentFilter !== 'all' && r.status !== currentFilter) return false;
-    if (q && !r.url.toLowerCase().includes(q) && !r.domain.toLowerCase().includes(q)) return false;
-    return true;
-  });
-  doSort();
-  renderTable();
-}
-
-// ─── Sort ───
-function sortBy(key) {
-  if (sortKey === key) sortAsc = !sortAsc;
-  else { sortKey = key; sortAsc = true; }
-  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
-  doSort();
-  renderTable();
-}
-
-function doSort() {
-  filtered.sort((a, b) => {
-    let va = a[sortKey], vb = b[sortKey];
-    if (va === null || va === undefined) va = sortAsc ? Infinity : -Infinity;
-    if (vb === null || vb === undefined) vb = sortAsc ? Infinity : -Infinity;
-    if (typeof va === 'boolean') { va = va ? 1 : 0; vb = vb ? 1 : 0; }
-    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
-    return sortAsc ? va - vb : vb - va;
-  });
-}
-
-// ─── CSV Export ───
-function exportCSV() {
-  const hdr = ['序號','URL','域名','圖片收錄','頁面索引','圖片數量','最佳排名','圖片標題','圖片網址','來源頁面','摘要'];
-  const rows = filtered.map(r => [
-    r.i, r.url, r.domain,
-    r.image_found?'是':'否', r.indexed?'是':'否',
-    r.image_count, r.best_position||'',
-    r.image_titles, r.image_urls, r.source_urls, r.snippet
-  ]);
-  const csv = '\uFEFF' + [hdr,...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'image-serp-results.csv';
-  a.click();
-}
-
-// ─── Init ───
-drawDonut();
-drawDomainBars();
-renderTable();
-</script>
-</body>
-</html>
+const DATA=[{"i": 1, "url": "https://8kgaviator.com", "domain": "8kgaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Cassino Online: Segurança e Vantagens Exclusivas", "image_urls": "", "source_urls": "https://8kgaviator.com/assets/images/logo.png?v=21", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 2, "url": "https://kissbetaviator.com", "domain": "kissbetaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Inovações na kissbet.com", "image_urls": "", "source_urls": "https://kissbetaviator.com/assets/images/slot.gif", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 3, "url": "https://76qaviator.com", "domain": "76qaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 4, "url": "https://hh666aviator.com", "domain": "hh666aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Descubra Diversos Jogos na hh666.com", "image_urls": "", "source_urls": "https://hh666aviator.com/assets/images/slot.gif", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 5, "url": "https://3800betaviator.com", "domain": "3800betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 6, "url": "https://265betaviator.com", "domain": "265betaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Segurança Máxima nas Apostas da 265bet.com", "image_urls": "", "source_urls": "https://265betaviator.com/assets/images/logo.png?v=71", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 7, "url": "https://122betaviator.com", "domain": "122betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 8, "url": "https://571betaviator.com", "domain": "571betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 9, "url": "https://234vipaviator.com", "domain": "234vipaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "App de Cassino: Segurança e Benefícios VIP Garantidos | Cassino Live na 234vip.com", "image_urls": " | ", "source_urls": "https://234vipaviator.com/assets/images/logo.png?v=11 | https://234vipaviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 10, "url": "https://br645aviator.com", "domain": "br645aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Cassino Confiável com Ofertas VIP Exclusivas", "image_urls": "", "source_urls": "https://br645aviator.com/assets/images/logo.png?v=41", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 11, "url": "https://0055betaviator.com", "domain": "0055betaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "App Confiável: Benefícios VIP Faciais", "image_urls": "", "source_urls": "https://0055betaviator.com/assets/images/logo.png?v=91", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 12, "url": "https://5mpgaviator.com", "domain": "5mpgaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 13, "url": "https://xixbetaviator.com", "domain": "xixbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 14, "url": "https://7uaviator.com", "domain": "7uaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Entre com Segurança: Links Oficiais", "image_urls": "", "source_urls": "https://7uaviator.com/assets/images/logo.png?v=71", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 15, "url": "https://45daviator.com", "domain": "45daviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Ofertas Imperdíveis na 45d.com | Ofertas Imperdíveis na 45d.com", "image_urls": " | ", "source_urls": "https://45daviator.com/assets/images/logo.png?v=21 | https://45daviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 16, "url": "https://73raviator.com", "domain": "73raviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 6, "best_position": 1, "image_titles": "Cassino Online: Jogue com Segurança e Bônus Extra | Experimente Jogos em Tempo Real na 73r.com | Cassino Online: Jogue com Segurança e Bônus Extra | Cassino Online: Jogue com Segurança e Bônus Extra | Cassino Online: Jogue com Segurança e Bônus Extra", "image_urls": " |  |  |  | ", "source_urls": "https://73raviator.com/assets/images/logo.png?v=31 | https://73raviator.com/assets/images/slot.gif | https://73raviator.com/assets/images/home-3-img.png?v=31 | https://73raviator.com/assets/images/home-2-img.png?v=31 | https://73raviator.com/assets/images/home-4-img.png?v=31", "snippet": "✓ 找到 6 張圖片，最佳排名第 1 名"}, {"i": 17, "url": "https://luarpgaviator.com", "domain": "luarpgaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Apostas Seguras e Interativas em luarpg.com", "image_urls": "", "source_urls": "https://luarpgaviator.com/assets/images/logo.png?v=81", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 18, "url": "https://77bbaviator.com", "domain": "77bbaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Cassino Variado: Jogos Populares e Emocionantes | Entre na 77bb.com Agora", "image_urls": " | ", "source_urls": "https://77bbaviator.com/assets/images/logo.png?v=81 | https://77bbaviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 19, "url": "https://uuqaviator.com", "domain": "uuqaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Navegação Segura: Acesso Confiável", "image_urls": "", "source_urls": "https://uuqaviator.com/assets/images/logo.png?v=11", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 20, "url": "https://52betaviator.com", "domain": "52betaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Descubra a Segurança nas Apostas 52bet.com", "image_urls": "", "source_urls": "https://52betaviator.com/assets/images/logo.png?v=71", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 21, "url": "https://35caviator.com", "domain": "35caviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 22, "url": "https://k69aviator.com", "domain": "k69aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Expanda Sua Presença Digital com k69.com", "image_urls": "", "source_urls": "https://k69aviator.com/assets/images/logo.png?v=11", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 23, "url": "https://1010aviator.com", "domain": "1010aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 24, "url": "https://qq888aviator.com", "domain": "qq888aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Apostas Confiáveis com qq888.com", "image_urls": "", "source_urls": "https://qq888aviator.com/assets/images/logo.png?v=81", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 25, "url": "https://own777aviator.com", "domain": "own777aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 26, "url": "https://719betaviator.com", "domain": "719betaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Experiência de Aposta Confiável com 719bet.com", "image_urls": "", "source_urls": "https://719betaviator.com/assets/images/logo.png?v=21", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 27, "url": "https://5jjaviator.com", "domain": "5jjaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 28, "url": "https://ckcbetaviator.com", "domain": "ckcbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 29, "url": "https://11qaviator.com", "domain": "11qaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 30, "url": "https://45baviator.com", "domain": "45baviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 31, "url": "https://444tigeraviator.com", "domain": "444tigeraviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 32, "url": "https://8531betaviator.com", "domain": "8531betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 33, "url": "https://zzqqaviator.com", "domain": "zzqqaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Cassino Online Seguro: Proteção e Bônus Exclusivos", "image_urls": "", "source_urls": "https://zzqqaviator.com/assets/images/logo.png?v=21", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 34, "url": "https://winxxaviator.com", "domain": "winxxaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Tecnologia e Confiabilidade na winxx.com | Ofertas Imperdíveis na winxx.com", "image_urls": " | ", "source_urls": "https://winxxaviator.com/assets/images/slot.gif | https://winxxaviator.com/assets/images/logo.png?v=81", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 35, "url": "https://win345aviator.com", "domain": "win345aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Plataforma Completa: Desempenho Elevado e VIP | Confiabilidade e Tecnologia na win345.com", "image_urls": " | ", "source_urls": "https://win345aviator.com/assets/images/logo.png?v=71 | https://win345aviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 36, "url": "https://688xaviator.com", "domain": "688xaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Acesso Fácil: Entradas Seguras e Rápidas", "image_urls": "", "source_urls": "https://688xaviator.com/assets/images/logo.png?v=01", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 37, "url": "https://63baviator.com", "domain": "63baviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 38, "url": "https://72eaviator.com", "domain": "72eaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Segurança Suprema na 72e.com", "image_urls": "", "source_urls": "https://72eaviator.com/assets/images/logo.png?v=51", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 39, "url": "https://98zaviator.com", "domain": "98zaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 40, "url": "https://9rbetaviator.com", "domain": "9rbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 41, "url": "https://pfbetaviator.com", "domain": "pfbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 42, "url": "https://22braviator.com", "domain": "22braviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 43, "url": "https://nnzzaviator.com", "domain": "nnzzaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 44, "url": "https://xxvipaviator.com", "domain": "xxvipaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Segurança Máxima no xxvip.com", "image_urls": "", "source_urls": "https://xxvipaviator.com/assets/images/logo.png?v=11", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 45, "url": "https://777tigeraviator.com", "domain": "777tigeraviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 46, "url": "https://55daviator.com", "domain": "55daviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 47, "url": "https://58raviator.com", "domain": "58raviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 48, "url": "https://8857aviator.com", "domain": "8857aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Aposte com Segurança e Rapidez na 8857.com", "image_urls": "", "source_urls": "https://8857aviator.com/assets/images/logo.png?v=01", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 49, "url": "https://5567aviator.com", "domain": "5567aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 50, "url": "https://66jogoaviator.com", "domain": "66jogoaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Inscrição Rápida: Bônus Aguardando Você | Inscrição Rápida: Bônus Aguardando Você", "image_urls": " | ", "source_urls": "https://66jogoaviator.com/assets/images/logo.png?v=91 | https://66jogoaviator.com/assets/images/cadastre-se-1-img.png?v=91", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 51, "url": "https://nrnraviator.com", "domain": "nrnraviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Entre na nrnr.com Com Segurança Hoje", "image_urls": "", "source_urls": "https://nrnraviator.com/assets/images/slot.gif", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 52, "url": "https://boomrioaviator.com", "domain": "boomrioaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 53, "url": "https://pk44aviator.com", "domain": "pk44aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 54, "url": "https://sssqaviator.com", "domain": "sssqaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Cadastro Simples: Bônus de Boas-Vindas Espera por Você | Cassino Online: Segurança e Recursos Exclusivos", "image_urls": " | ", "source_urls": "https://sssqaviator.com/assets/images/logo.png?v=31 | https://sssqaviator.com/assets/images/home-6-img.png?v=31", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 55, "url": "https://78faviator.com", "domain": "78faviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Se Cadastre Fácil: Bônus à Espera", "image_urls": "", "source_urls": "https://78faviator.com/assets/images/logo.png?v=31", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 56, "url": "https://wwbbaviator.com", "domain": "wwbbaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Instale o App wwbb.com Já! | Participe da wwbb.com: Cadastre-se!", "image_urls": " | ", "source_urls": "https://wwbbaviator.com/assets/images/logo.png?v=41 | https://wwbbaviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 57, "url": "https://389winaviator.com", "domain": "389winaviator.com", "status": "error", "indexed": false, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "錯誤: sequence item 0: expected str instance, NoneType found"}, {"i": 58, "url": "https://sol777aviator.com", "domain": "sol777aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Obtenha o App sol777.com já! | Aposte de Forma Confiável na sol777.com", "image_urls": " | ", "source_urls": "https://sol777aviator.com/assets/images/slot.gif | https://sol777aviator.com/assets/images/logo.png?v=31", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 59, "url": "https://55bbaviator.com", "domain": "55bbaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 3, "best_position": 1, "image_titles": "Cadastro Simples: Ganhe Bônus e Conquistas | Explore Odds na 55bb.com | Cadastro Simples: Ganhe Bônus e Conquistas", "image_urls": " |  | ", "source_urls": "https://55bbaviator.com/assets/images/logo.png?v=61 | https://55bbaviator.com/assets/images/slot.gif | https://55bbaviator.com/assets/images/cadastre-se-2-img.png?v=61", "snippet": "✓ 找到 3 張圖片，最佳排名第 1 名"}, {"i": 60, "url": "https://vcjogoaviator.com", "domain": "vcjogoaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 61, "url": "https://u34aviator.com", "domain": "u34aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 62, "url": "https://81ggaviator.com", "domain": "81ggaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 63, "url": "https://kcbetaviator.com", "domain": "kcbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "API 錯誤 40102: No Search Results."}, {"i": 64, "url": "https://5853aviator.com", "domain": "5853aviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Acesso Seguro na 5853.com", "image_urls": "", "source_urls": "https://5853aviator.com/assets/images/slot.gif", "snippet": "✓ 找到 1 張圖片，最佳排名第 1 名"}, {"i": 65, "url": "https://27eaviator.com", "domain": "27eaviator.com", "status": "found", "indexed": true, "image_found": true, "image_count": 2, "best_position": 1, "image_titles": "Experiência Única e Segura no Cassino Online | Acesso ao Cassino: Simplicidade e Segurança", "image_urls": " | ", "source_urls": "https://27eaviator.com/assets/images/logo.png?v=61 | https://27eaviator.com/assets/images/slot.gif", "snippet": "✓ 找到 2 張圖片，最佳排名第 1 名"}, {"i": 66, "url": "https://ss123aviator.com", "domain": "ss123aviator.com", "status": "error", "indexed": false, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Promoções Exclusivas: Experiência VIP", "image_urls": "", "source_urls": "https://ss123aviator.com/assets/images/logo.png?v=81", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/organic/live/advanced"}, {"i": 67, "url": "https://nu777aviator.com", "domain": "nu777aviator.com", "status": "error", "indexed": false, "image_found": true, "image_count": 1, "best_position": 1, "image_titles": "Promoções VIP: O Melhor em Experiência", "image_urls": "", "source_urls": "https://nu777aviator.com/assets/images/promocoes-1-img.png?v=41", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/organic/live/advanced"}, {"i": 68, "url": "https://516betaviator.com", "domain": "516betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 69, "url": "https://26taviator.com", "domain": "26taviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 70, "url": "https://2288betaviator.com", "domain": "2288betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 71, "url": "https://68uaviator.com", "domain": "68uaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 72, "url": "https://iphonepgaviator.com", "domain": "iphonepgaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 73, "url": "https://2uuuaviator.com", "domain": "2uuuaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 74, "url": "https://57eaviator.com", "domain": "57eaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 75, "url": "https://73betaviator.com", "domain": "73betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 76, "url": "https://88raviator.com", "domain": "88raviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 77, "url": "https://522betaviator.com", "domain": "522betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 78, "url": "https://8pgaviator.com", "domain": "8pgaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 79, "url": "https://7656aviator.com", "domain": "7656aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 80, "url": "https://5gggaviator.com", "domain": "5gggaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 81, "url": "https://9daviator.com", "domain": "9daviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 82, "url": "https://cc77aviator.com", "domain": "cc77aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 83, "url": "https://35maviator.com", "domain": "35maviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 84, "url": "https://q89aviator.com", "domain": "q89aviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 85, "url": "https://811betaviator.com", "domain": "811betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 86, "url": "https://2jjaviator.com", "domain": "2jjaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 87, "url": "https://62pgaviator.com", "domain": "62pgaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 88, "url": "https://ffwinaviator.com", "domain": "ffwinaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 89, "url": "https://76daviator.com", "domain": "76daviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 90, "url": "https://85eaviator.com", "domain": "85eaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 91, "url": "https://bkbetaviator.com", "domain": "bkbetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 92, "url": "https://zbzbaviator.com", "domain": "zbzbaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 93, "url": "https://lobobetaviator.com", "domain": "lobobetaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 94, "url": "https://83haviator.com", "domain": "83haviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 95, "url": "https://5hhhaviator.com", "domain": "5hhhaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 96, "url": "https://559xaviator.com", "domain": "559xaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 97, "url": "https://66dkaviator.com", "domain": "66dkaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 98, "url": "https://ssvvaviator.com", "domain": "ssvvaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 99, "url": "https://667betaviator.com", "domain": "667betaviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}, {"i": 100, "url": "https://27rraviator.com", "domain": "27rraviator.com", "status": "error", "indexed": false, "image_found": false, "image_count": 0, "best_position": null, "image_titles": "", "image_urls": "", "source_urls": "", "snippet": "HTTP 0: 402 Client Error: Payment Required for url: https://api.dataforseo.com/v3/serp/google/images/live/advanced"}];const DOMAINS=[{"domain": "8kgaviator.com", "total": 1, "found": 1}, {"domain": "kissbetaviator.com", "total": 1, "found": 1}, {"domain": "76qaviator.com", "total": 1, "found": 0}, {"domain": "hh666aviator.com", "total": 1, "found": 1}, {"domain": "3800betaviator.com", "total": 1, "found": 0}, {"domain": "265betaviator.com", "total": 1, "found": 1}, {"domain": "122betaviator.com", "total": 1, "found": 0}, {"domain": "571betaviator.com", "total": 1, "found": 0}, {"domain": "234vipaviator.com", "total": 1, "found": 1}, {"domain": "br645aviator.com", "total": 1, "found": 1}, {"domain": "0055betaviator.com", "total": 1, "found": 1}, {"domain": "5mpgaviator.com", "total": 1, "found": 0}, {"domain": "xixbetaviator.com", "total": 1, "found": 0}, {"domain": "7uaviator.com", "total": 1, "found": 1}, {"domain": "45daviator.com", "total": 1, "found": 1}, {"domain": "73raviator.com", "total": 1, "found": 1}, {"domain": "luarpgaviator.com", "total": 1, "found": 1}, {"domain": "77bbaviator.com", "total": 1, "found": 1}, {"domain": "uuqaviator.com", "total": 1, "found": 1}, {"domain": "52betaviator.com", "total": 1, "found": 1}];
+let filtered=[...DATA],currentFilter='all',sortKey='i',sortAsc=true;
+function drawDonut(){const svg=document.getElementById('donut');const vals=[36,0,67];const colors=['var(--green)','var(--red)','var(--amber)'];const t=vals.reduce((a,b)=>a+b,0)||1;const cx=90,cy=90,r=70;const circ=2*Math.PI*r;let cum=-90;svg.innerHTML='';vals.forEach((v,i)=>{if(!v)return;const pct=v/t;const dash=circ*pct;const gap=circ-dash;const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill','none');c.setAttribute('stroke',colors[i]);c.setAttribute('stroke-width','18');c.setAttribute('stroke-dasharray',`${dash} ${gap}`);c.setAttribute('transform',`rotate(${cum} ${cx} ${cy})`);svg.appendChild(c);cum+=pct*360;});}
+function drawDomainBars(){const el=document.getElementById('domainBars');const mx=Math.max(...DOMAINS.map(d=>d.total),1);el.innerHTML=DOMAINS.map(d=>{const fp=(d.found/mx*100).toFixed(1);const np=((d.total-d.found)/mx*100).toFixed(1);const r=(d.found/d.total*100).toFixed(1);return `<div class="bar-row"><div class="bar-label" title="${d.domain}">${d.domain}</div><div class="bar-track"><div class="bar-fill green" style="width:${fp}%;position:absolute"></div><div class="bar-fill red" style="width:${Number(fp)+Number(np)}%"></div></div><div class="bar-val">${d.found}/${d.total} (${r}%)</div></div>`;}).join('');}
+function renderTable(){const tb=document.getElementById('tbody');tb.innerHTML=filtered.map(r=>`<tr><td class="mono center">${r.i}</td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.url)}"><a href="${esc(r.url)}" target="_blank" style="color:var(--blue);text-decoration:none">${esc(r.url)}</a></td><td style="font-size:12px;color:var(--text2)">${esc(r.domain)}</td><td class="center"><span class="badge ${r.status}">${r.image_found?'✓ 已收錄':r.status==='error'?'⚠ 錯誤':'✗ 未收錄'}</span></td><td class="center">${r.indexed?'<span class=yes>是</span>':'<span class=no>否</span>'}</td><td class="mono center">${r.image_count}</td><td class="mono center">${r.best_position||'—'}</td><td style="font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.snippet)}">${esc(r.snippet)}</td></tr>`).join('');document.getElementById('countInfo').textContent=`顯示 ${filtered.length} / ${DATA.length} 筆`;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function setFilter(btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=btn.dataset.filter;applyFilters();}
+function applyFilters(){const q=document.getElementById('search').value.toLowerCase();filtered=DATA.filter(r=>{if(currentFilter!=='all'&&r.status!==currentFilter)return false;if(q&&!r.url.toLowerCase().includes(q)&&!r.domain.toLowerCase().includes(q))return false;return true;});doSort();renderTable();}
+function sortBy(key){if(sortKey===key)sortAsc=!sortAsc;else{sortKey=key;sortAsc=true;}doSort();renderTable();}
+function doSort(){filtered.sort((a,b)=>{let va=a[sortKey],vb=b[sortKey];if(va==null)va=sortAsc?Infinity:-Infinity;if(vb==null)vb=sortAsc?Infinity:-Infinity;if(typeof va==='boolean'){va=va?1:0;vb=vb?1:0;}if(typeof va==='string')return sortAsc?va.localeCompare(vb):vb.localeCompare(va);return sortAsc?va-vb:vb-va;});}
+function exportCSV(){const h=['序號','URL','域名','圖片收錄','頁面索引','圖片數量','最佳排名','摘要'];const rows=filtered.map(r=>[r.i,r.url,r.domain,r.image_found?'是':'否',r.indexed?'是':'否',r.image_count,r.best_position||'',r.snippet]);const csv='\uFEFF'+[h,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='image-serp-results.csv';a.click();}
+drawDonut();drawDomainBars();renderTable();
+</script></body></html>
